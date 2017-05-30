@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+</head>
+<body>
+
+<table class="table">
+    <tr>
+        <td><input type="text" id="myId" placeholder="My Id.." readonly/></td>
+        <td><input type="text" id="friendId" placeholder="My friend Id.."/></td>
+    </tr>
+    <tr>
+        <td>
+            <video id="localStream" width="300" controls></video>
+        </td>
+        <td>
+            <video id="friendStream" width="300" controls></video>
+        </td>
+    </tr>
+</table>
+<br/>
+<button id="btnConnect">Connect</button>
+</body>
+<script src="bundle.js"></script>
+</html>
