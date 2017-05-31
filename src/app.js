@@ -9,7 +9,8 @@ const config = ({host: 'streaming-rtc.herokuapp.com', secure: true, port: 443, k
 
 const openStream = require('./openStream');
 const playVideo = require('./playVideo');
-var socket = io('https://stream-with-jim.herokuapp.com/');
+var socket = io('http://localhost:3000');
+//var socket = io('https://stream-with-jim.herokuapp.com/');
 
 var app = angular.module('app', []);
 
@@ -42,8 +43,8 @@ function CallFriend(id) {
 
 app.controller('AppController', function ($scope) {
 
-    $scope.userList = [{name: 'sds', peerId: 1}];
     const peer = new Peer(getUid(), config);
+    $scope.userList = [];
 
     peer.on('open', function (id) {
         $('#btnLogin').click(function () {
@@ -64,11 +65,15 @@ app.controller('AppController', function ($scope) {
         })
     });
 
+    socket.on('user_disconnect', (users) => {
+        $scope.$apply(function () {
+            $scope.userList = users;
+        })
+    });
+
     socket.on('online_list', function (users) {
         $('#chat').show();
         $('#login').hide();
-
-        alert('online list');
 
         $scope.$apply(function () {
             $scope.userList = users;
@@ -81,12 +86,12 @@ app.controller('AppController', function ($scope) {
 
             var call = peer.call(peerId, stream);
             call.on('stream', function (remoteStream) {
-                console.log(remoteStream);
-                playVideo(remoteStream, 'friendStream');
+                console.log('Call : ' + remoteStream);
+                playVideo(remoteStream, 'friendStream', peerId);
             });
 
             call.on('close', function () {
-                alert('disconnect');
+                $('#videoline ' + '#' + call.peer).remove();
             });
         });
     }
@@ -98,12 +103,12 @@ app.controller('AppController', function ($scope) {
 
             call.answer(stream); // Answer the call with an A/V stream.
             call.on('stream', function (remoteStream) {
-                console.log(remoteStream);
-                playVideo(remoteStream, 'friendStream');
+                console.log('Answer : ' + remoteStream);
+                playVideo(remoteStream, 'friendStream', call.peer);
             });
 
             call.on('close', function () {
-                alert('disconnect');
+                $('#videoline ' + '#' + call.peer).remove();
             });
         });
     });

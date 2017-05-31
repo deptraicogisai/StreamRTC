@@ -60,7 +60,7 @@ app.use(function (err, req, res, next) {
     });
 });
 
-server.listen( process.env.PORT || 3000,function(){
+server.listen(process.env.PORT || 3000, function () {
     console.log('Listtening..');
 })
 
@@ -73,10 +73,18 @@ io.on('connection', function (socket) {
 
         if (isExist) return socket.emit('error_register');
         arrUserInfo.push(user);
-        console.log(user);
+        socket.name = user.name;
         socket.emit('online_list', arrUserInfo);
         socket.broadcast.emit('new_user', user);
     })
+
+    socket.on('disconnect', function () {
+        arrUserInfo = _.filter(arrUserInfo, function(userInfo) {
+            return userInfo.name != socket.name;
+        });
+
+        socket.broadcast.emit('user_disconnect', arrUserInfo);
+    });
 })
 ;
 
