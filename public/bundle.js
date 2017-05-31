@@ -13411,8 +13411,8 @@ const config = ({host: 'streaming-rtc.herokuapp.com', secure: true, port: 443, k
 
 const openStream = __webpack_require__(9);
 const playVideo = __webpack_require__(10);
-var socket = io('http://localhost:3000');
-//var socket = io('https://stream-with-jim.herokuapp.com/');
+// var socket = io('http://localhost:3000');
+var socket = io('https://stream-with-jim.herokuapp.com/');
 
 var app = angular.module('app', []);
 
