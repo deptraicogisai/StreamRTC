@@ -23,24 +23,6 @@ function getUid() {
     return myUid;
 }
 
-
-function CallFriend(id) {
-
-    openStream(function (stream) {
-        playVideo(stream, 'localStream');
-
-        var call = peer.call(friendId, stream);
-        call.on('stream', function (remoteStream) {
-            console.log(remoteStream);
-            playVideo(remoteStream, 'friendStream');
-        });
-
-        call.on('close', function () {
-            alert('disconnect');
-        });
-    });
-}
-
 app.controller('AppController', function ($scope) {
 
     const peer = new Peer(getUid(), config);

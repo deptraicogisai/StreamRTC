@@ -12,8 +12,4 @@ function playVideo(stream, control, peerId) {
     };
 }
 
-function removeVideo(peerId){
-    $('#videoline').find(`#${peerId}`).remove();
-}
-
 module.exports = playVideo;
