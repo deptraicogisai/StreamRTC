@@ -9,7 +9,7 @@ const config = ({host: 'streaming-rtc.herokuapp.com', secure: true, port: 443, k
 
 const openStream = require('./openStream');
 const playVideo = require('./playVideo');
-var socket = io('http://localhost:3000');
+var socket = io('https://stream-with-jim.herokuapp.com/');
 
 var app = angular.module('app', []);
 
