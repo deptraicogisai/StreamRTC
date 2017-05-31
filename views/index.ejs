@@ -1,27 +1,53 @@
-<!DOCTYPE html>
 <html>
 <head>
     <title><%= title %></title>
-    <link rel="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="socket.js"></script>
+    <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.js"></script>
+    <script src="angular.js"></script>
 </head>
-<body>
-
-<table class="table">
-    <tr>
-        <td><input type="text" id="myId" placeholder="My Id.." readonly/></td>
-        <td><input type="text" id="friendId" placeholder="My friend Id.."/></td>
-    </tr>
-    <tr>
-        <td>
-            <video id="localStream" width="300" controls></video>
-        </td>
-        <td>
-            <video id="friendStream" width="300" controls></video>
-        </td>
-    </tr>
-</table>
-<br/>
-<button id="btnConnect">Connect</button>
+<body ng-app="app" ng-controller="AppController">
+<div id="login" class="text-center">
+    Username : <input type="text" id="txtUsername">
+    <button id="btnLogin" class="btn btn-primary">Login</button>
+</div>
+<div id="chat">
+    <table class="table">
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td><input type="text" id="myId" placeholder="My Id.." readonly/></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <video id="localStream" width="300" controls></video>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="friendId" placeholder="My friend Id.."/></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <video id="friendStream" width="300" controls></video>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table class="table">
+                    <tr  ng-repeat="item in userList">
+                        <td>{{item.name}}</td>
+                        <td><button ng-click="callFriend(item.peerId)" class="btn btn-primary" ng-hide="item.peerId == myId">Call</button></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <br/>
+    <button id="btnConnect" class="btn btn-primary">Connect</button>
+</div>
 </body>
 <script src="bundle.js"></script>
 </html>
