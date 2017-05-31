@@ -60,7 +60,9 @@ app.use(function (err, req, res, next) {
     });
 });
 
-server.listen(process.env.PORT || 3000)
+server.listen( process.env.PORT || 3000,function(){
+    console.log('Listtening..');
+})
 
 
 io.on('connection', function (socket) {
