@@ -3,6 +3,7 @@
     <title><%= title %></title>
     <link rel="stylesheet" type="text/css"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel='stylesheet' href='/stylesheets/animate.css'/>
     <script src="socket.js"></script>
     <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.js"></script>
     <script src="angular.js"></script>
@@ -26,10 +27,10 @@
             </td>
             <td>
                 <table class="table">
-                    <tr ng-repeat="item in userList">
+                    <tr ng-repeat="item in userList" ng-init="item.canCall = true" class="animated bounceInLeft">
                         <td>{{item.name}}</td>
                         <td>
-                            <button ng-click="callFriend(item.peerId)" class="btn btn-primary"
+                            <button ng-click="item.canCall && callFriend(item)" class="btn btn-primary"
                                     ng-hide="item.peerId == myId">Call
                             </button>
                         </td>

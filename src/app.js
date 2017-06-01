@@ -26,50 +26,52 @@ function getUid() {
 app.controller('AppController', function ($scope) {
 
     const peer = new Peer(getUid(), config);
+
     $scope.userList = [];
 
-    peer.on('open', function (id) {
+    peer.on('open', (id) => {
+
         $('#btnLogin').click(function () {
 
             const username = $('#txtUsername').val();
+
             $scope.myId = id;
+
             socket.emit('user_register', {name: username, peerId: id});
         });
     })
 
-    socket.on('error_register', function () {
-        alert('Dang nhap that bai cmm roi !')
-    })
+    socket.on('error_register', () => alert('Dang nhap that bai cmm roi !'))
 
-    socket.on('new_user', function (user) {
-        $scope.$apply(function () {
-            $scope.userList.push(user);
-        })
+    socket.on('new_user', (user) => {
+        $scope.$apply(() => $scope.userList.push(user))
     });
 
     socket.on('user_disconnect', (users) => {
-        $scope.$apply(function () {
-            $scope.userList = users;
-        })
+        $scope.$apply(() => $scope.userList = users)
     });
 
-    socket.on('online_list', function (users) {
+    socket.on('online_list', (users) => {
         $('#chat').show();
         $('#login').hide();
 
         $scope.$apply(function () {
-            $scope.userList = users;
-        })
+                $scope.userList = users;
+            }
+        )
     })
 
-    $scope.callFriend = function (peerId) {
+    $scope.callFriend = function (item) {
         openStream(function (stream) {
+
+            item.canCall = false;
+
             playVideo(stream, 'localStream');
 
-            var call = peer.call(peerId, stream);
+            var call = peer.call(item.peerId, stream);
             call.on('stream', function (remoteStream) {
                 console.log('Call : ' + remoteStream);
-                playVideo(remoteStream, 'friendStream', peerId);
+                playVideo(remoteStream, 'friendStream', item.peerId);
             });
 
             call.on('close', function () {
@@ -81,15 +83,24 @@ app.controller('AppController', function ($scope) {
     peer.on('call', function (call) {
 
         openStream(function (stream) {
+
+            _.forEach($scope.userList, (user) => {
+                if (user.peerId == call.peer) {
+                    user.canCall = false;
+                }
+            });
+
             playVideo(stream, 'localStream');
 
             call.answer(stream); // Answer the call with an A/V stream.
+
             call.on('stream', function (remoteStream) {
                 console.log('Answer : ' + remoteStream);
                 playVideo(remoteStream, 'friendStream', call.peer);
             });
 
             call.on('close', function () {
+                console.log(call.peer);
                 $('#videoline ' + '#' + call.peer).remove();
             });
         });
