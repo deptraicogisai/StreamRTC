@@ -69,6 +69,10 @@ app.controller('AppController', function ($scope) {
             playVideo(stream, 'localStream');
 
             var call = peer.call(item.peerId, stream);
+
+            call.name = 'Caller here';
+
+
             call.on('stream', function (remoteStream) {
                 console.log('Call : ' + remoteStream);
                 playVideo(remoteStream, 'friendStream', item.peerId);
@@ -81,6 +85,8 @@ app.controller('AppController', function ($scope) {
     }
 
     peer.on('call', function (call) {
+
+        alert(call.name);
 
         openStream(function (stream) {
 
@@ -100,7 +106,6 @@ app.controller('AppController', function ($scope) {
             });
 
             call.on('close', function () {
-                console.log(call.peer);
                 $('#videoline ' + '#' + call.peer).remove();
             });
         });
